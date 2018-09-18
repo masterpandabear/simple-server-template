@@ -5,6 +5,7 @@
 
 const http = require('http');
 const app = require('./app');
+const { logger } = require('./application/loggers');
 
 /**
  * Normalize a port into a number, string, or false.
@@ -59,11 +60,11 @@ function onError(error) {
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(`${bind} requires elevated privileges`);
+      logger.error(`${bind} requires elevated privileges`);
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error(`${bind} + ' is already in use`);
+      logger.error(`${bind} + ' is already in use`);
       process.exit(1);
       break;
     default:
@@ -76,9 +77,10 @@ function onError(error) {
  */
 
 function onListening() {
+  logger.debug('Running on debug mode');
   const addr = server.address();
   const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
-  console.log(`Running at ${bind}`);
+  logger.info(`Running at ${bind}`);
 }
 
 server.on('error', onError);
